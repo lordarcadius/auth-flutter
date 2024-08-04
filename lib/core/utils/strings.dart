@@ -14,4 +14,5 @@ class Strings {
   static const String dontHaveAccount = "Don't have an account?";
   static const String noConnection = "No internet connection!";
   static const String userNotLoggedIn = "User is not logged in!";
+  static const String errorOccured = "An error has occured.";
 }
