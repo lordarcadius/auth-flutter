@@ -1,8 +1,8 @@
 import 'package:auth_flutter/core/routes/route_constants.dart';
 import 'package:auth_flutter/core/utils/router_transition.dart';
-import 'package:auth_flutter/features/auth/presentation/pages/reset_password_page.dart';
-import 'package:auth_flutter/features/auth/presentation/pages/login_page.dart';
-import 'package:auth_flutter/features/auth/presentation/pages/signup_page.dart';
+import 'package:auth_flutter/features/auth/presentation/pages/reset/reset_password_page.dart';
+import 'package:auth_flutter/features/auth/presentation/pages/login/login_page.dart';
+import 'package:auth_flutter/features/auth/presentation/pages/signup/signup_page.dart';
 import 'package:auth_flutter/features/products/presentation/products_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
