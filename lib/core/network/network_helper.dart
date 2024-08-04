@@ -20,15 +20,17 @@ class NetworkHelper {
     return result.substring(0, result.length - 1);
   }
 
-  static R filterResponse<R>(
-      {required NetworkCallBack callBack,
-      required http.Response? response,
-      required NetworkOnFailureCallBackWithMessage onFailureCallBackWithMessage,
-      CallBackParameterName parameterName = CallBackParameterName.all}) {
+  static R filterResponse<R>({
+    required NetworkCallBack<R> callBack,
+    required http.Response? response,
+    required NetworkOnFailureCallBackWithMessage<R>
+        onFailureCallBackWithMessage,
+    CallBackParameterName parameterName = CallBackParameterName.all,
+  }) {
     try {
       if (response == null || response.body.isEmpty) {
         return onFailureCallBackWithMessage(
-            NetworkResponseErrorType.responseEmpty, 'empty response');
+            NetworkResponseErrorType.responseEmpty, 'Empty response');
       }
 
       var json = jsonDecode(response.body);
@@ -39,13 +41,20 @@ class NetworkHelper {
         }
       } else if (response.statusCode == 1708) {
         return onFailureCallBackWithMessage(
-            NetworkResponseErrorType.socket, 'socket');
+            NetworkResponseErrorType.socket, 'Socket error');
+      } else {
+        String errorMessage = json != null && json["message"] != null
+            ? json["message"]
+            : "Unknown error";
+        return onFailureCallBackWithMessage(
+            NetworkResponseErrorType.didNotSucceed, errorMessage);
       }
-      return onFailureCallBackWithMessage(
-          NetworkResponseErrorType.didNotSucceed, 'unknown');
     } catch (e) {
       return onFailureCallBackWithMessage(
-          NetworkResponseErrorType.exception, 'Exception $e');
+          NetworkResponseErrorType.exception, "$e");
     }
+
+    // Ensure a non-nullable return type
+    throw Exception('Unhandled case in filterResponse');
   }
 }

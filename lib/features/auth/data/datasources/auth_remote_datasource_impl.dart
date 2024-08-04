@@ -1,7 +1,6 @@
 import 'package:auth_flutter/core/network/api_client.dart';
 import 'package:auth_flutter/core/network/network_helper.dart';
 import 'package:auth_flutter/core/network/network_service.dart';
-import 'package:auth_flutter/core/utils/strings.dart';
 import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:auth_flutter/features/auth/data/models/login_response.dart';
 import 'package:auth_flutter/features/auth/data/models/signup_response.dart';
@@ -23,8 +22,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return NetworkHelper.filterResponse(
       callBack: (json) => LoginResponse.fromJson(json),
       response: response,
-      onFailureCallBackWithMessage: (errorType, msg) =>
-          throw Exception("${Strings.errorOccured} $errorType - $msg"),
+      onFailureCallBackWithMessage: (errorType, msg) => throw "$msg",
     );
   }
 
@@ -46,8 +44,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return NetworkHelper.filterResponse(
       callBack: (json) => SignupResponse.fromJson(json),
       response: response,
-      onFailureCallBackWithMessage: (errorType, msg) =>
-          throw Exception("${Strings.errorOccured} $errorType - $msg"),
+      onFailureCallBackWithMessage: (errorType, msg) => throw "$msg",
     );
   }
 }
