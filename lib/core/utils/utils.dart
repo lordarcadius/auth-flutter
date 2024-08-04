@@ -18,7 +18,7 @@ class Utils {
   }
 
   static String? passwordlValidator(String? value) {
-    if (value == null || value.isEmpty || value.length < 6) {
+    if (value == null || value.isEmpty || value.length < 4) {
       return Strings.invalidPasswordError;
     }
 

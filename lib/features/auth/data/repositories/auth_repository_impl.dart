@@ -24,10 +24,11 @@ class AuthRepositoryImpl extends AuthRepository {
       if (!await connectionChecker.isConnected) {
         return left(Failure(Strings.noConnection));
       }
-
-      final login =
-          await remoteDataSource.login(email: email, password: password);
-      return right(login);
+      final login = await remoteDataSource.login(
+        email: email,
+        password: password,
+      );
+      return right(login.toEntity());
     } catch (e) {
       return left(Failure(e.toString()));
     }
@@ -45,7 +46,10 @@ class AuthRepositoryImpl extends AuthRepository {
       }
 
       final signup = await remoteDataSource.signup(
-          name: name, email: email, password: password);
+        name: name,
+        email: email,
+        password: password,
+      );
       return right(signup);
     } catch (e) {
       return left(Failure(e.toString()));

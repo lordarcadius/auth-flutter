@@ -33,7 +33,7 @@ class NetworkHelper {
 
       var json = jsonDecode(response.body);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         if (json != null) {
           return callBack(parameterName.getJson(json));
         }

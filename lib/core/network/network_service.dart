@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'network_helper.dart';
@@ -22,7 +21,7 @@ class NetworkService {
     if (requestType == RequestType.get) {
       return http.get(uri, headers: headers);
     } else if (requestType == RequestType.post) {
-      return http.post(uri, body: jsonEncode(body));
+      return http.post(uri, headers: headers, body: jsonEncode(body));
     }
     return null;
   }
@@ -38,15 +37,14 @@ class NetworkService {
       final apiUrl = NetworkHelper.concatUrlQP(url, queryParam);
 
       final response = await _createRequest(
-          requestType: requestType,
-          uri: Uri.parse(apiUrl),
-          headers: header,
-          body: body);
-
+        requestType: requestType,
+        uri: Uri.parse(apiUrl),
+        headers: header,
+        body: body,
+      );
       return response;
     } catch (e) {
-      debugPrint('Error - $e');
-      return null;
+      throw e.toString();
     }
   }
 }

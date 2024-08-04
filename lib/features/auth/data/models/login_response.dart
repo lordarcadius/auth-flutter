@@ -2,37 +2,45 @@ import 'dart:convert';
 
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
 
-class LoginResponse extends Login {
+class LoginResponse {
+  final String message;
+  final bool success;
+  final String token;
+  final String email;
+  final String name;
+
   LoginResponse({
-    required super.message,
-    required super.success,
-    required super.token,
-    required super.email,
-    required super.name,
+    required this.message,
+    required this.success,
+    required this.token,
+    required this.email,
+    required this.name,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'message': message,
-      'success': success,
-      'token': token,
-      'email': email,
-      'name': name,
-    };
-  }
+  factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
+        message: json["message"],
+        success: json["success"],
+        token: json["token"],
+        email: json["email"],
+        name: json["name"],
+      );
 
-  factory LoginResponse.fromMap(Map<String, dynamic> map) {
-    return LoginResponse(
-      message: map['message'] as String,
-      success: map['success'] as bool,
-      token: map['token'] as String,
-      email: map['email'] as String,
-      name: map['name'] as String,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+        "message": message,
+        "success": success,
+        "token": token,
+        "email": email,
+        "name": name,
+      };
 
-  String toJson() => json.encode(toMap());
+  Login toEntity() => Login(
+        token: token,
+        email: email,
+        name: name,
+      );
 
-  factory LoginResponse.fromJson(String source) =>
-      LoginResponse.fromMap(json.decode(source) as Map<String, dynamic>);
+  LoginResponse loginResponseFromJson(String str) =>
+      LoginResponse.fromJson(json.decode(str));
+
+  String loginResponseToJson(LoginResponse data) => json.encode(data.toJson());
 }
