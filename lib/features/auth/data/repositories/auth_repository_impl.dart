@@ -50,7 +50,7 @@ class AuthRepositoryImpl extends AuthRepository {
         email: email,
         password: password,
       );
-      return right(signup);
+      return right(signup.toEntity());
     } catch (e) {
       return left(Failure(e.toString()));
     }

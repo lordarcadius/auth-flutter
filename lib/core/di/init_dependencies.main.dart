@@ -51,5 +51,10 @@ void _initAuth() {
     //Login Bloc
     ..registerLazySingleton(
       () => LoginBloc(userLogin: serviceLocator()),
+    )
+
+    //Signup Bloc
+    ..registerLazySingleton(
+      () => SignupBloc(userSignup: serviceLocator()),
     );
 }

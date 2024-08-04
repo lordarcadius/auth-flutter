@@ -2,28 +2,33 @@ import 'dart:convert';
 
 import 'package:auth_flutter/features/auth/domain/entities/signup.dart';
 
-class SignupResponse extends Signup {
+class SignupResponse {
+  final String message;
+  final bool success;
+
   SignupResponse({
-    required super.message,
-    required super.success,
+    required this.message,
+    required this.success,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'message': message,
-      'success': success,
-    };
-  }
+  factory SignupResponse.fromJson(Map<String, dynamic> json) => SignupResponse(
+        message: json["message"],
+        success: json["success"],
+      );
 
-  factory SignupResponse.fromMap(Map<String, dynamic> map) {
-    return SignupResponse(
-      message: map['message'] as String,
-      success: map['success'] as bool,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+        "message": message,
+        "success": success,
+      };
 
-  String toJson() => json.encode(toMap());
+  SignupResponse signupResponseFromJson(String str) =>
+      SignupResponse.fromJson(json.decode(str));
 
-  factory SignupResponse.fromJson(String source) =>
-      SignupResponse.fromMap(json.decode(source) as Map<String, dynamic>);
+  Signup toEntity() => Signup(
+        message: message,
+        success: success,
+      );
+
+  String signupResponseToJson(SignupResponse data) =>
+      json.encode(data.toJson());
 }
