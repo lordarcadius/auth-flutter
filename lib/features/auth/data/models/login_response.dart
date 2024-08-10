@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auth_flutter/features/auth/data/models/user_model.dart';
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
 
 class LoginResponse {
@@ -37,6 +38,12 @@ class LoginResponse {
         token: token,
         email: email,
         name: name,
+      );
+
+  UserModel toUser() => UserModel(
+        email: email,
+        name: name,
+        token: token,
       );
 
   LoginResponse loginResponseFromJson(String str) =>

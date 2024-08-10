@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:auth_flutter/features/auth/domain/entities/login.dart';
+
 class UserModel {
   final String email;
   final String name;
@@ -27,6 +29,8 @@ class UserModel {
   }
 
   String toJson() => json.encode(toMap());
+
+  Login toEntity() => Login(token: token, email: email, name: name);
 
   factory UserModel.fromJson(String source) =>
       UserModel.fromMap(json.decode(source) as Map<String, dynamic>);

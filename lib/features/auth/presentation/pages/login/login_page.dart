@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (state is LoginFailure) {
                   showSnackbar(context, state.message);
                 } else if (state is LoginSuccess) {
-                  GoRouter.of(context).pushNamed(RouteConstants.productsRoute);
+                  GoRouter.of(context).pushNamed(RouteConstants.homeRoute);
                 }
               },
               builder: (context, state) {

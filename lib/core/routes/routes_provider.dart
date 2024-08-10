@@ -3,7 +3,6 @@ import 'package:auth_flutter/core/utils/router_transition.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/reset/reset_password_page.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/login/login_page.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/signup/signup_page.dart';
-import 'package:auth_flutter/features/products/presentation/products_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,15 +14,15 @@ final GlobalKey<NavigatorState> _rootNavigatorKey =
 
 class RoutesProvider {
   static final GoRouter _router = GoRouter(
-    initialLocation: "/",
+    initialLocation: RouteConstants.homeRoute,
     navigatorKey: _rootNavigatorKey,
     routes: [
       GoRoute(
-        path: "/",
+        path: RouteConstants.homeRoute,
+        name: RouteConstants.homeRoute,
         pageBuilder: (context, state) {
           return RouterTransition(
             key: state.pageKey,
-            //TODO: Place HomePage here when it is ready
             child: const LoginPage(),
             forMobile: !kIsWeb,
           );
@@ -58,17 +57,6 @@ class RoutesProvider {
           return RouterTransition(
             key: state.pageKey,
             child: const ResetPasswordPage(),
-            forMobile: !kIsWeb,
-          );
-        },
-      ),
-      GoRoute(
-        path: "/${RouteConstants.productsRoute}",
-        name: RouteConstants.productsRoute,
-        pageBuilder: (context, state) {
-          return RouterTransition(
-            key: state.pageKey,
-            child: const ProductsPage(),
             forMobile: !kIsWeb,
           );
         },

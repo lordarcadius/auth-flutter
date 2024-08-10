@@ -34,7 +34,7 @@ class AuthRepositoryImpl extends AuthRepository {
       );
       await Prefs.writeSecureData(
         key: Constants.KEY_STORE,
-        value: jsonEncode(login.toJson()).toString(),
+        value: jsonEncode(login.toUser().toJson()).toString(),
       );
       return right(login.toEntity());
     } catch (e) {
@@ -59,6 +59,20 @@ class AuthRepositoryImpl extends AuthRepository {
         password: password,
       );
       return right(signup.toEntity());
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Login>> session() async {
+    try {
+      if (!await connectionChecker.isConnected) {
+        return left(Failure(Strings.noConnection));
+      }
+
+      final session = await remoteDataSource.validateSession();
+      return right(session.toEntity());
     } catch (e) {
       return left(Failure(e.toString()));
     }

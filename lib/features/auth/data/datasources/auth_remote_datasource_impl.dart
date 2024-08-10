@@ -1,9 +1,14 @@
+import 'dart:convert';
 import 'package:auth_flutter/core/network/api_client.dart';
 import 'package:auth_flutter/core/network/network_helper.dart';
 import 'package:auth_flutter/core/network/network_service.dart';
+import 'package:auth_flutter/core/utils/constants.dart';
+import 'package:auth_flutter/core/utils/prefs.dart';
 import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:auth_flutter/features/auth/data/models/login_response.dart';
 import 'package:auth_flutter/features/auth/data/models/signup_response.dart';
+import 'package:auth_flutter/features/auth/data/models/user_model.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
@@ -46,5 +51,15 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       response: response,
       onFailureCallBackWithMessage: (errorType, msg) => throw "$msg",
     );
+  }
+
+  @override
+  Future<UserModel> validateSession() async {
+    final user = UserModel.fromJson(
+      jsonDecode(await Prefs.readSecureData(key: Constants.KEY_STORE)),
+    );
+
+    debugPrint(user.name);
+    return user;
   }
 }

@@ -48,9 +48,17 @@ void _initAuth() {
       () => UserSignup(authRepository: serviceLocator()),
     )
 
+    //Session Usecase
+    ..registerFactory(
+      () => UserSession(authRepository: serviceLocator()),
+    )
+
     //Login Bloc
     ..registerLazySingleton(
-      () => LoginBloc(userLogin: serviceLocator()),
+      () => LoginBloc(
+        userLogin: serviceLocator(),
+        userSession: serviceLocator(),
+      ),
     )
 
     //Signup Bloc

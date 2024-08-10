@@ -5,6 +5,7 @@ import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasour
 import 'package:auth_flutter/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:auth_flutter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:auth_flutter/features/auth/domain/usecases/user_login.dart';
+import 'package:auth_flutter/features/auth/domain/usecases/user_session.dart';
 import 'package:auth_flutter/features/auth/domain/usecases/user_signup.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/login/bloc/login_bloc.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/signup/bloc/signup_bloc.dart';
