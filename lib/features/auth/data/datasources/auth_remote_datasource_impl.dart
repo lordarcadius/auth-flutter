@@ -8,7 +8,6 @@ import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasour
 import 'package:auth_flutter/features/auth/data/models/login_response.dart';
 import 'package:auth_flutter/features/auth/data/models/signup_response.dart';
 import 'package:auth_flutter/features/auth/data/models/user_model.dart';
-import 'package:flutter/foundation.dart';
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
@@ -58,8 +57,6 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     final user = UserModel.fromJson(
       jsonDecode(await Prefs.readSecureData(key: Constants.KEY_STORE)),
     );
-
-    debugPrint(user.name);
     return user;
   }
 }
