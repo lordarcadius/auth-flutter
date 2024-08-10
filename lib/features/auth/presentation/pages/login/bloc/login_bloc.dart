@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:auth_flutter/core/params/login_params.dart';
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
 import 'package:auth_flutter/features/auth/domain/usecases/user_login.dart';
@@ -22,7 +20,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     response.fold(
       (failure) => emit(LoginFailure(message: failure.message)),
       (success) {
-        //TODO: Store login state here in secure shared prefs
         emit(LoginSuccess(login: success));
       },
     );

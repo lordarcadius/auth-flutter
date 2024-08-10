@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:auth_flutter/core/errors/failure.dart';
 import 'package:auth_flutter/core/network/connection_checker.dart';
+import 'package:auth_flutter/core/utils/constants.dart';
+import 'package:auth_flutter/core/utils/prefs.dart';
 import 'package:auth_flutter/core/utils/strings.dart';
 import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
@@ -27,6 +31,10 @@ class AuthRepositoryImpl extends AuthRepository {
       final login = await remoteDataSource.login(
         email: email,
         password: password,
+      );
+      await Prefs.writeSecureData(
+        key: Constants.KEY_STORE,
+        value: jsonEncode(login.toJson()).toString(),
       );
       return right(login.toEntity());
     } catch (e) {
