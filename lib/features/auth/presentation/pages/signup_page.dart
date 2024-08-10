@@ -8,27 +8,30 @@ import 'package:auth_flutter/core/utils/constants.dart';
 import 'package:auth_flutter/core/widgets/elevated_button.dart';
 import 'package:auth_flutter/core/widgets/loader.dart';
 import 'package:auth_flutter/core/widgets/textfield.dart';
-import 'package:auth_flutter/features/auth/presentation/pages/login/bloc/login_bloc.dart';
+import 'package:auth_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignupPageState extends State<SignupPage> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
+  final nameController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
+    nameController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -36,22 +39,24 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text(Strings.signup),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(Sizes.spacingSmall),
         child: Center(
           child: BlocProvider(
-            create: (context) => serviceLocator<LoginBloc>(),
-            child: BlocConsumer<LoginBloc, LoginState>(
+            create: (context) => serviceLocator<AuthBloc>(),
+            child: BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
-                if (state is LoginFailure) {
+                if (state is AuthFailure) {
                   showSnackbar(context, state.message);
-                } else if (state is LoginSuccess) {
-                  GoRouter.of(context).pushNamed(RouteConstants.homeRoute);
+                } else if (state is AuthSignupSuccess) {
+                  GoRouter.of(context).pushNamed(RouteConstants.loginRoute);
                 }
               },
               builder: (context, state) {
-                if (state is LoginLoading) {
+                if (state is AuthLoading) {
                   return const Loader();
                 }
                 return SingleChildScrollView(
@@ -59,7 +64,6 @@ class _LoginPageState extends State<LoginPage> {
                   key: formKey,
                   child: Column(
                     children: [
-                      Sizes.sizeBoxHt24,
                       const Icon(
                         Bootstrap.infinity,
                         size: 90,
@@ -67,10 +71,17 @@ class _LoginPageState extends State<LoginPage> {
                       const Text(
                         Constants.APP_NAME,
                         style: TextStyle(
-                            fontSize: Sizes.fontLarge,
-                            fontWeight: FontWeight.bold),
+                          fontSize: Sizes.fontLarge,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Sizes.sizeBoxHt60,
+                      VTextField(
+                        hintText: Strings.name,
+                        textController: nameController,
+                        validator: Utils.nameValidator,
+                      ),
+                      Sizes.sizeBoxHt14,
                       VTextField(
                         hintText: Strings.email,
                         textController: emailController,
@@ -83,17 +94,17 @@ class _LoginPageState extends State<LoginPage> {
                         validator: Utils.passwordlValidator,
                         obscureText: true,
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: _forgetPasswordPressed,
-                          child: const Text(Strings.forgotPassword),
-                        ),
+                      Sizes.sizeBoxHt14,
+                      VTextField(
+                        hintText: Strings.confirmPassword,
+                        textController: confirmPasswordController,
+                        validator: _confirmPasswordValidation,
+                        obscureText: true,
                       ),
-                      Sizes.sizeBoxHt10,
+                      Sizes.sizeBoxHt40,
                       VElevatedButton(
-                        text: Strings.login,
-                        onPressed: () => _loginPressed(context),
+                        text: Strings.signup,
+                        onPressed: () => _signupPressed(context),
                       ),
                       Sizes.sizeBoxHt40,
                       const Row(
@@ -126,24 +137,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      Sizes.sizeBoxHt40,
-                      TextButton(
-                        onPressed: _signupPressed,
-                        child: RichText(
-                          text: TextSpan(
-                            text: Strings.dontHaveAccount,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            children: [
-                              TextSpan(
-                                text: " ${Strings.signup}",
-                                style: const TextStyle().copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ));
@@ -155,14 +148,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _forgetPasswordPressed() {
-    GoRouter.of(context).pushNamed(RouteConstants.resetPasswordRoute);
-  }
-
-  void _loginPressed(BuildContext context) {
+  void _signupPressed(BuildContext context) {
     if (formKey.currentState?.validate() == true) {
-      context.read<LoginBloc>().add(
-            LoginRequest(
+      context.read<AuthBloc>().add(
+            AuthSignup(
+              name: nameController.text.trim(),
               email: emailController.text.trim(),
               password: passwordController.text.trim(),
             ),
@@ -170,7 +160,11 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _signupPressed() {
-    GoRouter.of(context).pushNamed(RouteConstants.signupRoute);
+  String? _confirmPasswordValidation(String? value) {
+    if (value == null || value != passwordController.text) {
+      return Strings.invalidConfirmPasswordError;
+    }
+
+    return null;
   }
 }

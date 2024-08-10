@@ -8,30 +8,27 @@ import 'package:auth_flutter/core/utils/constants.dart';
 import 'package:auth_flutter/core/widgets/elevated_button.dart';
 import 'package:auth_flutter/core/widgets/loader.dart';
 import 'package:auth_flutter/core/widgets/textfield.dart';
-import 'package:auth_flutter/features/auth/presentation/pages/signup/bloc/signup_bloc.dart';
+import 'package:auth_flutter/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_plus/icons_plus.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
-  final nameController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     emailController.dispose();
-    nameController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -39,24 +36,22 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(Strings.signup),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(Sizes.spacingSmall),
         child: Center(
           child: BlocProvider(
-            create: (context) => serviceLocator<SignupBloc>(),
-            child: BlocConsumer<SignupBloc, SignupState>(
+            create: (context) => serviceLocator<AuthBloc>(),
+            child: BlocConsumer<AuthBloc, AuthState>(
               listener: (context, state) {
-                if (state is SignupFailure) {
+                if (state is AuthFailure) {
                   showSnackbar(context, state.message);
-                } else if (state is SignupSuccess) {
-                  GoRouter.of(context).pushNamed(RouteConstants.loginRoute);
+                } else if (state is AuthLoginSuccess) {
+                  GoRouter.of(context).pushNamed(RouteConstants.homeRoute);
                 }
               },
               builder: (context, state) {
-                if (state is SignupLoading) {
+                if (state is AuthLoading) {
                   return const Loader();
                 }
                 return SingleChildScrollView(
@@ -64,6 +59,7 @@ class _SignupPageState extends State<SignupPage> {
                   key: formKey,
                   child: Column(
                     children: [
+                      Sizes.sizeBoxHt24,
                       const Icon(
                         Bootstrap.infinity,
                         size: 90,
@@ -71,17 +67,10 @@ class _SignupPageState extends State<SignupPage> {
                       const Text(
                         Constants.APP_NAME,
                         style: TextStyle(
-                          fontSize: Sizes.fontLarge,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            fontSize: Sizes.fontLarge,
+                            fontWeight: FontWeight.bold),
                       ),
                       Sizes.sizeBoxHt60,
-                      VTextField(
-                        hintText: Strings.name,
-                        textController: nameController,
-                        validator: Utils.nameValidator,
-                      ),
-                      Sizes.sizeBoxHt14,
                       VTextField(
                         hintText: Strings.email,
                         textController: emailController,
@@ -94,17 +83,17 @@ class _SignupPageState extends State<SignupPage> {
                         validator: Utils.passwordlValidator,
                         obscureText: true,
                       ),
-                      Sizes.sizeBoxHt14,
-                      VTextField(
-                        hintText: Strings.confirmPassword,
-                        textController: confirmPasswordController,
-                        validator: _confirmPasswordValidation,
-                        obscureText: true,
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: _forgetPasswordPressed,
+                          child: const Text(Strings.forgotPassword),
+                        ),
                       ),
-                      Sizes.sizeBoxHt40,
+                      Sizes.sizeBoxHt10,
                       VElevatedButton(
-                        text: Strings.signup,
-                        onPressed: () => _signupPressed(context),
+                        text: Strings.login,
+                        onPressed: () => _loginPressed(context),
                       ),
                       Sizes.sizeBoxHt40,
                       const Row(
@@ -137,6 +126,24 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                         ],
                       ),
+                      Sizes.sizeBoxHt40,
+                      TextButton(
+                        onPressed: _signupPressed,
+                        child: RichText(
+                          text: TextSpan(
+                            text: Strings.dontHaveAccount,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            children: [
+                              TextSpan(
+                                text: " ${Strings.signup}",
+                                style: const TextStyle().copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ));
@@ -148,11 +155,14 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 
-  void _signupPressed(BuildContext context) {
+  void _forgetPasswordPressed() {
+    GoRouter.of(context).pushNamed(RouteConstants.resetPasswordRoute);
+  }
+
+  void _loginPressed(BuildContext context) {
     if (formKey.currentState?.validate() == true) {
-      context.read<SignupBloc>().add(
-            SignupRequest(
-              name: nameController.text.trim(),
+      context.read<AuthBloc>().add(
+            AuthLogin(
               email: emailController.text.trim(),
               password: passwordController.text.trim(),
             ),
@@ -160,11 +170,7 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
-  String? _confirmPasswordValidation(String? value) {
-    if (value == null || value != passwordController.text) {
-      return Strings.invalidConfirmPasswordError;
-    }
-
-    return null;
+  void _signupPressed() {
+    GoRouter.of(context).pushNamed(RouteConstants.signupRoute);
   }
 }
