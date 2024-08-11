@@ -71,7 +71,7 @@ class AuthRepositoryImpl extends AuthRepository {
         return left(Failure(Strings.noConnection));
       }
 
-      final session = await remoteDataSource.validateSession();
+      final session = await remoteDataSource.session();
       return right(session.toEntity());
     } catch (e) {
       return left(Failure(e.toString()));

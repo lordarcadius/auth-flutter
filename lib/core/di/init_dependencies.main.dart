@@ -6,6 +6,7 @@ Future<void> initDependencies() async {
   _initRouter();
   _initInternetConnectionChecker();
   _initAuth();
+  _initSessionManager();
 }
 
 void _initRouter() {
@@ -20,6 +21,10 @@ void _initInternetConnectionChecker() {
       internetConnection: serviceLocator(),
     ),
   );
+}
+
+void _initSessionManager() {
+  serviceLocator.registerSingleton(UserSessionManager());
 }
 
 void _initAuth() {

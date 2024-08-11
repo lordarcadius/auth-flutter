@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:auth_flutter/features/auth/data/models/user_model.dart';
+import 'package:auth_flutter/features/auth/data/models/session_model.dart';
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
 
 class LoginResponse {
@@ -40,7 +40,7 @@ class LoginResponse {
         name: name,
       );
 
-  UserModel toUser() => UserModel(
+  SessionModel toUser() => SessionModel(
         email: email,
         name: name,
         token: token,

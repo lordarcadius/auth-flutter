@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
 
-class UserModel {
+class SessionModel {
   final String email;
   final String name;
   final String token;
-  UserModel({
+  SessionModel({
     required this.email,
     required this.name,
     required this.token,
@@ -20,8 +20,8 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+  factory SessionModel.fromMap(Map<String, dynamic> map) {
+    return SessionModel(
       email: map['email'] as String,
       name: map['name'] as String,
       token: map['token'] as String,
@@ -32,6 +32,6 @@ class UserModel {
 
   Login toEntity() => Login(token: token, email: email, name: name);
 
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory SessionModel.fromJson(String source) =>
+      SessionModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

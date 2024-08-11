@@ -1,3 +1,5 @@
+import 'package:auth_flutter/core/di/init_dependencies.dart';
+import 'package:auth_flutter/core/utils/session_manager.dart';
 import 'package:flutter/material.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -10,9 +12,10 @@ class ProductsPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text("Products Page"),
+        child: Text(
+            "Products Page: ${serviceLocator<UserSessionManager>().getUser()?.email}"),
       ),
     );
   }

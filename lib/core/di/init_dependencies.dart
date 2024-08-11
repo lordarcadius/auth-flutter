@@ -1,5 +1,6 @@
 import 'package:auth_flutter/core/network/connection_checker.dart';
 import 'package:auth_flutter/core/routes/routes_provider.dart';
+import 'package:auth_flutter/core/utils/session_manager.dart';
 import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasource_impl.dart';
 import 'package:auth_flutter/features/auth/data/repositories/auth_repository_impl.dart';

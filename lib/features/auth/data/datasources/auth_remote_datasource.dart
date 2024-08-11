@@ -1,6 +1,6 @@
 import 'package:auth_flutter/features/auth/data/models/login_response.dart';
 import 'package:auth_flutter/features/auth/data/models/signup_response.dart';
-import 'package:auth_flutter/features/auth/data/models/user_model.dart';
+import 'package:auth_flutter/features/auth/data/models/session_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<SignupResponse> signup({
@@ -14,5 +14,5 @@ abstract class AuthRemoteDataSource {
     required String password,
   });
 
-  Future<UserModel> validateSession();
+  Future<SessionModel> session();
 }

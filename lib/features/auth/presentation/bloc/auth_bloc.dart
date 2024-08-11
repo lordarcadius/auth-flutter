@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:auth_flutter/core/di/init_dependencies.dart';
 import 'package:auth_flutter/core/params/login_params.dart';
 import 'package:auth_flutter/core/params/signup_params.dart';
 import 'package:auth_flutter/core/usecase/usecase.dart';
+import 'package:auth_flutter/core/utils/session_manager.dart';
 import 'package:auth_flutter/features/auth/domain/entities/login.dart';
 import 'package:auth_flutter/features/auth/domain/entities/signup.dart';
 import 'package:auth_flutter/features/auth/domain/usecases/user_login.dart';
@@ -36,6 +38,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     response.fold(
       (failure) => emit(AuthFailure(message: failure.message)),
       (success) {
+        final session = serviceLocator<UserSessionManager>();
+        session.setUser(success);
         emit(AuthLoginSuccess(login: success));
       },
     );
@@ -63,6 +67,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     response.fold(
       (failure) => emit(AuthFailure(message: failure.message)),
       (success) {
+        final session = serviceLocator<UserSessionManager>();
+        session.setUser(success);
         emit(AuthLoginSuccess(login: success));
       },
     );

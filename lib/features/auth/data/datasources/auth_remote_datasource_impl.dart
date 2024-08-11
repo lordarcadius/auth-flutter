@@ -7,7 +7,7 @@ import 'package:auth_flutter/core/utils/prefs.dart';
 import 'package:auth_flutter/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:auth_flutter/features/auth/data/models/login_response.dart';
 import 'package:auth_flutter/features/auth/data/models/signup_response.dart';
-import 'package:auth_flutter/features/auth/data/models/user_model.dart';
+import 'package:auth_flutter/features/auth/data/models/session_model.dart';
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   @override
@@ -53,10 +53,12 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> validateSession() async {
-    final user = UserModel.fromJson(
-      jsonDecode(await Prefs.readSecureData(key: Constants.KEY_STORE)),
-    );
+  Future<SessionModel> session() async {
+    final data = await Prefs.readSecureData(key: Constants.KEY_STORE);
+    final user = SessionModel.fromJson(jsonDecode(data));
+
+    await Future.delayed(const Duration(seconds: 2));
+
     return user;
   }
 }
