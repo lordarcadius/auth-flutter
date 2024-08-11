@@ -7,6 +7,7 @@ Future<void> initDependencies() async {
   _initInternetConnectionChecker();
   _initAuth();
   _initSessionManager();
+  _initProducts();
 }
 
 void _initRouter() {
@@ -66,4 +67,32 @@ void _initAuth() {
         userSession: serviceLocator(),
       ),
     );
+}
+
+void _initProducts() {
+  serviceLocator
+
+    //Products Remote Data Source
+    ..registerFactory<ProductsRemoteDataSource>(
+      () => ProductsRemoteDataSourceImpl(),
+    )
+
+    //Products Repository
+    ..registerFactory<ProductsRepository>(
+      () => ProductsRepositoryImpl(
+        dataSource: serviceLocator(),
+      ),
+    )
+
+    //Products Usecase
+    ..registerFactory(
+      () => ProductsUsecase(
+        repository: serviceLocator(),
+      ),
+    )
+
+    //Login Bloc
+    ..registerLazySingleton(() => ProductsBloc(
+          productsUsecase: serviceLocator(),
+        ));
 }

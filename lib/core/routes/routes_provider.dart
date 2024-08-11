@@ -4,7 +4,7 @@ import 'package:auth_flutter/features/auth/presentation/pages/reset_password_pag
 import 'package:auth_flutter/features/auth/presentation/pages/login_page.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/signup_page.dart';
 import 'package:auth_flutter/features/auth/presentation/pages/splash_page.dart';
-import 'package:auth_flutter/features/products/presentation/products_page.dart';
+import 'package:auth_flutter/features/products/presentation/pages/products_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
